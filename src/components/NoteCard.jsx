@@ -102,6 +102,33 @@ function NoteCard({
           </>
         )}
       </div>
+      
+      <div className="color-picker">
+        <button
+          style={{ background: "#ffffff" }}
+          onClick={() => changeColor(note.id, "#ffffff")}
+        />
+
+        <button
+          style={{ background: "#f28b82" }}
+          onClick={() => changeColor(note.id, "#f28b82")}
+        />
+
+        <button
+          style={{ background: "#fff475" }}
+          onClick={() => changeColor(note.id, "#fff475")}
+        />
+
+        <button
+          style={{ background: "#ccff90" }}
+          onClick={() => changeColor(note.id, "#ccff90")}
+        />
+
+        <button
+          style={{ background: "#aecbfa" }}
+          onClick={() => changeColor(note.id, "#aecbfa")}
+        />
+      </div>
     </div>
   );
 }
