@@ -13,6 +13,7 @@ import {
   MdArchive,
 } from "react-icons/md";
 
+
 function CreateNote({ addNote }) {
   const [note, setNote] = useState({
     title: "",
@@ -62,6 +63,7 @@ function handleSubmit() {
     title: note.title,
     content: note.content,
     pinned: note.pinned,
+    archived: false,
   });
 }
 
