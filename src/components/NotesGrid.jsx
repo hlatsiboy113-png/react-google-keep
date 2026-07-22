@@ -1,6 +1,11 @@
 import NoteCard from "./NoteCard";
 
-function NotesGrid({ notes, deleteNote, togglePin, toggleArchive, editNote}) {
+function NotesGrid({
+  notes,
+  deleteNote,
+  togglePin,
+  editNote,
+}) {
   return (
     <div className="notes-grid">
       {notes.map((note) => (
@@ -9,7 +14,6 @@ function NotesGrid({ notes, deleteNote, togglePin, toggleArchive, editNote}) {
           note={note}
           deleteNote={deleteNote}
           togglePin={togglePin}
-          toggleArchive={toggleArchive}
           editNote={editNote}
         />
       ))}
