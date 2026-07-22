@@ -64,6 +64,7 @@ function handleSubmit() {
     content: note.content,
     pinned: note.pinned,
     archived: false,
+    color: "#ffffff",
   });
 }
 
