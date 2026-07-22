@@ -70,6 +70,18 @@ function editNote(updatedNote) {
   );
 }
 
+function changeColor(id, color) {
+  console.log("Changing:", id, color);
+
+  setNotes((prevNotes) =>
+    prevNotes.map((note) =>
+      note.id === id
+        ? { ...note, color }
+        : note
+    )
+  );
+}
+
 return (
   <>
   <Header 
@@ -90,6 +102,7 @@ return (
         togglePin={togglePin}
         toggleArchive={toggleArchive}
         editNote={editNote}
+        changeColor={changeColor}
       />
     </main>
   </div>
