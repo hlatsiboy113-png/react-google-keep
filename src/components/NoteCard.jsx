@@ -23,9 +23,13 @@ function NoteCard({
   const [showColors, setShowColors] = useState(false);
 
   function startEditing() {
-    setEditedNote({ ...note });
-    setIsEditing(true);
-  }
+  setEditedNote({
+    ...note,
+    color: note.color || "#ffffff",
+  });
+
+  setIsEditing(true);
+}
 
   function saveChanges() {
     editNote(editedNote);
@@ -36,6 +40,18 @@ function NoteCard({
     setEditedNote({ ...note });
     setIsEditing(false);
   }
+
+  function changeColor(id, color) {
+  console.log(id, color);
+
+  setNotes((prevNotes) =>
+    prevNotes.map((note) =>
+      note.id === id
+        ? { ...note, color }
+        : note
+    )
+  );
+}
 
 return (
   <div
@@ -110,7 +126,13 @@ return (
                   className="color-dot"
                   style={{ background: "#ffffff" }}
                   onClick={() => {
-                    changeColor(note.id, "#ffffff");
+                    changeColor(note.id, "#f28b82");
+
+                    setEditedNote({
+                      ...editedNote,
+                      color: "#f28b82",
+                    });
+
                     setShowColors(false);
                   }}
                 />
@@ -128,9 +150,15 @@ return (
                   className="color-dot"
                   style={{ background: "#fff475" }}
                   onClick={() => {
-                    changeColor(note.id, "#fff475");
-                    setShowColors(false);
-                  }}
+                  changeColor(note.id, "#f28b82");
+
+                  setEditedNote({
+                    ...editedNote,
+                    color: "#f28b82",
+                  });
+
+                  setShowColors(false);
+                }}
                 />
 
                 <button
