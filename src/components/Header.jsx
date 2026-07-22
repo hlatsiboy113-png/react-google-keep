@@ -7,7 +7,7 @@ import {
 } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 
-function Header() {
+function Header({ searchTerm, setSearchTerm}){
   return (
     <header className="header">
       <div className="header-left">
@@ -27,6 +27,8 @@ function Header() {
         <input
           type="text"
           placeholder="Search notes..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
