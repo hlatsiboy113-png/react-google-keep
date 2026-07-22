@@ -44,10 +44,13 @@ return (
       backgroundColor: note.color || "#ffffff",
     }}
   >
+    {/* Header */}
     <div className="note-header">
       {isEditing ? (
         <input
+          className="edit-title"
           type="text"
+          placeholder="Title"
           value={editedNote.title}
           onChange={(e) =>
             setEditedNote({
@@ -64,12 +67,19 @@ return (
         className="pin-btn"
         onClick={() => togglePin(note.id)}
       >
-        {note.pinned ? <MdPushPin /> : <MdOutlinePushPin />}
+        {note.pinned ? (
+          <MdPushPin />
+        ) : (
+          <MdOutlinePushPin />
+        )}
       </button>
     </div>
 
+    {/* Note Content */}
     {isEditing ? (
       <textarea
+        className="edit-content"
+        placeholder="Take a note..."
         value={editedNote.content}
         onChange={(e) =>
           setEditedNote({
@@ -82,22 +92,10 @@ return (
       <p>{note.content}</p>
     )}
 
+    {/* Action Buttons */}
     <div className="note-actions">
       {isEditing ? (
         <>
-          <button onClick={saveChanges}>Save</button>
-          <button onClick={cancelEditing}>Cancel</button>
-        </>
-      ) : (
-        <>
-          <button onClick={startEditing}>
-            <MdEdit />
-          </button>
-
-          <button onClick={() => deleteNote(note.id)}>
-            <MdDelete />
-          </button>
-
           <div className="color-container">
             <button
               className="icon-btn"
@@ -155,10 +153,24 @@ return (
               </div>
             )}
           </div>
+
+          <button onClick={saveChanges}>Save</button>
+
+          <button onClick={cancelEditing}>Cancel</button>
+        </>
+      ) : (
+        <>
+          <button onClick={startEditing}>
+            <MdEdit />
+          </button>
+
+          <button onClick={() => deleteNote(note.id)}>
+            <MdDelete />
+          </button>
         </>
       )}
     </div>
   </div>
 );
-
+}
 export default NoteCard;
