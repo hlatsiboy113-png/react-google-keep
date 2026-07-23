@@ -1,14 +1,12 @@
 /* ---------- CREATE NOTE ---------- */
 
-.create-note {
-  width: 600px;
-  max-width: 90%;
-  margin: 32px auto;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 1px 5px rgba(60, 64, 67, 0.3);
-
-  overflow: hidden;
+.create-note{
+    position:relative;
+    width:600px;
+    margin:auto;
+    border-radius:12px;
+    overflow:visible;
+    transition:.2s;
 }
 
 .collapsed-note {
@@ -27,19 +25,20 @@
   gap: 4px;
 }
 
-.create-note-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px 0;
+.create-note-header{
+    display:flex;
+    align-items:center;
+    padding:12px 16px;
+    background:transparent;
 }
 
-.create-note-header input {
-  width: 100%;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  font-weight: 500;
+.create-note input{
+    width:100%;
+    border:none;
+    outline:none;
+    font-size:18px;
+    font-weight:600;
+    background:transparent;
 }
 
 .pin-btn {
@@ -50,24 +49,55 @@
   color: #5f6368;
 }
 
-.create-note textarea {
-  width: 100%;
-  border: none;
-  resize: none;
-  outline: none;
-  padding: 12px 16px;
-  min-height: 100px;
-  font-size: 0.95rem;
-  font-family: inherit;
+.create-note textarea{
+    width:100%;
+    border:none;
+    outline:none;
+    resize:none;
+    min-height:120px;
+    padding:0 16px;
+    font-size:15px;
+    background:transparent;
 }
 
-.create-note-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.create-note-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:10px 16px;
+
+    background:transparent;
 }
 
-.note-actions,
+.note-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.note-actions .icon-btn{
+    width:36px;
+    height:36px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border:none;
+    background:none;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    color:#5f6368;
+}
+
+.note-actions .icon-btn:hover{
+    background:#f1f3f4;
+}
+
 .note-buttons {
   display: flex;
   gap: 8px;
@@ -119,4 +149,46 @@
   color: #5f6368;
   font-size: 15px;
   font-weight: 500;
+}
+
+/* ---------- Color Picker ---------- */
+
+.color-container{
+    position:relative;
+}
+
+.color-picker{
+    position:absolute;
+    bottom:45px;
+    left:0;
+
+    display:flex;
+    gap:8px;
+
+    padding:10px;
+
+    background:#fff;
+
+    border-radius:25px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.2);
+
+    z-index:9999;
+}
+
+.color-dot{
+    width:26px;
+    height:26px;
+
+    border-radius:50%;
+
+    border:1px solid #dadce0;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.color-dot:hover{
+    transform:scale(1.15);
 }
