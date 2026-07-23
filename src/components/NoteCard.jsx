@@ -5,6 +5,12 @@ import {
   MdEdit,
   MdDelete,
   MdPalette,
+  MdArchive,
+  MdPersonAdd,
+  MdImage,
+  MdNotificationsNone,
+  MdCheck,
+  MdClose,
 } from "react-icons/md";
 
 function NoteCard({
@@ -12,6 +18,7 @@ function NoteCard({
   deleteNote,
   togglePin,
   editNote,
+  toggleArchive,
   changeColor,
 }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -43,23 +50,23 @@ function NoteCard({
   }
 
   function handleColor(color) {
-    changeColor(note.id, color);
-
     setEditedNote((prev) => ({
       ...prev,
       color,
     }));
-
-    setShowColors(false);
   }
 
   return (
     <div
       className="note-card"
       style={{
-        backgroundColor: note.color || "#ffffff",
+        backgroundColor: isEditing
+          ? editedNote.color
+          : note.color || "#ffffff",
       }}
     >
+      {/* Header */}
+
       <div className="note-header">
         {isEditing ? (
           <input
@@ -79,7 +86,7 @@ function NoteCard({
         )}
 
         <button
-          className="pin-btn"
+          className="icon-btn"
           onClick={() => togglePin(note.id)}
         >
           {note.pinned ? (
@@ -89,6 +96,8 @@ function NoteCard({
           )}
         </button>
       </div>
+
+      {/* Content */}
 
       {isEditing ? (
         <textarea
@@ -106,72 +115,122 @@ function NoteCard({
         <p>{note.content}</p>
       )}
 
-      <div className="note-actions">
-        {isEditing ? (
-          <>
-            <div className="color-container">
-              <button
-                className="icon-btn"
-                onClick={() => setShowColors(!showColors)}
-              >
-                <MdPalette />
-              </button>
+      {/* Toolbar */}
 
-              {showColors && (
-                <div className="color-picker">
-                  <button
-                    className="color-dot"
-                    style={{ background: "#ffffff" }}
-                    onClick={() => handleColor("#ffffff")}
-                  />
+      {isEditing ? (
+        <div className="note-actions">
 
-                  <button
-                    className="color-dot"
-                    style={{ background: "#f28b82" }}
-                    onClick={() => handleColor("#f28b82")}
-                  />
+          <button className="icon-btn">
+            <MdArchive />
+          </button>
 
-                  <button
-                    className="color-dot"
-                    style={{ background: "#fff475" }}
-                    onClick={() => handleColor("#fff475")}
-                  />
+          <div className="color-container">
 
-                  <button
-                    className="color-dot"
-                    style={{ background: "#ccff90" }}
-                    onClick={() => handleColor("#ccff90")}
-                  />
-
-                  <button
-                    className="color-dot"
-                    style={{ background: "#aecbfa" }}
-                    onClick={() => handleColor("#aecbfa")}
-                  />
-                </div>
-              )}
-            </div>
-
-            <button onClick={saveChanges}>
-              Save
+            <button
+              className="icon-btn"
+              onClick={() => setShowColors(!showColors)}
+            >
+              <MdPalette />
             </button>
 
-            <button onClick={cancelEditing}>
-              Cancel
-            </button>
-          </>
-        ) : (
-          <>
-            <button onClick={startEditing}>
-              <MdEdit />
-            </button>
+            {showColors && (
+              <div className="color-picker">
 
-            <button onClick={() => deleteNote(note.id)}>
-              <MdDelete />
-            </button>
-          </>
-        )}
-      </div>
+                <button
+                  className="color-dot"
+                  style={{ background: "#ffffff" }}
+                  onClick={() => handleColor("#ffffff")}
+                />
+
+                <button
+                  className="color-dot"
+                  style={{ background: "#f28b82" }}
+                  onClick={() => handleColor("#f28b82")}
+                />
+
+                <button
+                  className="color-dot"
+                  style={{ background: "#fff475" }}
+                  onClick={() => handleColor("#fff475")}
+                />
+
+                <button
+                  className="color-dot"
+                  style={{ background: "#ccff90" }}
+                  onClick={() => handleColor("#ccff90")}
+                />
+
+                <button
+                  className="color-dot"
+                  style={{ background: "#aecbfa" }}
+                  onClick={() => handleColor("#aecbfa")}
+                />
+
+              </div>
+            )}
+
+          </div>
+
+          <button className="icon-btn">
+            <MdPersonAdd />
+          </button>
+
+          <button className="icon-btn">
+            <MdImage />
+          </button>
+
+          <button className="icon-btn">
+            <MdNotificationsNone />
+          </button>
+
+          <button
+            className="icon-btn"
+            onClick={() => deleteNote(note.id)}
+          >
+            <MdDelete />
+          </button>
+
+          <button
+            className="icon-btn"
+            onClick={saveChanges}
+          >
+            <MdCheck />
+          </button>
+
+          <button
+            className="icon-btn"
+            onClick={cancelEditing}
+          >
+            <MdClose />
+          </button>
+
+        </div>
+      ) : (
+        <div className="note-actions">
+
+          <button
+            className="icon-btn"
+            onClick={startEditing}
+          >
+            <MdEdit />
+          </button>
+
+          <button
+            className="icon-btn"
+            onClick={() => deleteNote(note.id)}
+          >
+            <MdDelete />
+          </button>
+
+          <button
+            className="icon-btn"
+            onClick={() => toggleArchive(note.id)}
+          >
+            <MdArchive />
+          </button>
+
+        </div>
+      )}
     </div>
   );
 }

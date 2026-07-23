@@ -5,6 +5,7 @@ function NotesGrid({
   deleteNote,
   togglePin,
   editNote,
+  changeColor
 }) {
   return (
     <div className="notes-grid">
@@ -15,6 +16,7 @@ function NotesGrid({
           deleteNote={deleteNote}
           togglePin={togglePin}
           editNote={editNote}
+          changeColor={changeColor}
         />
       ))}
     </div>
