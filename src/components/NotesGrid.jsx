@@ -3,10 +3,11 @@ import NoteCard from "./NoteCard";
 function NotesGrid({
   notes,
   deleteNote,
+  restoreNote,
+  permanentlyDeleteNote,
   togglePin,
   toggleArchive,
   editNote,
-  changeColor
 }) {
   return (
     <div className="notes-grid">
@@ -15,10 +16,11 @@ function NotesGrid({
           key={note.id}
           note={note}
           deleteNote={deleteNote}
+          restoreNote={restoreNote}
+          permanentlyDeleteNote={permanentlyDeleteNote}
           togglePin={togglePin}
           toggleArchive={toggleArchive}
           editNote={editNote}
-          changeColor={changeColor}
         />
       ))}
     </div>

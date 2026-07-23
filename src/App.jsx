@@ -21,11 +21,28 @@ function App() {
   function addNote(newNote) {
     setNotes((prevNotes) => [
       ...prevNotes,
-      { ...newNote, archived: false },
+      { ...newNote, archived: false, trashed: false },
     ]);
   }
 
+  // Soft delete: move to Bin instead of destroying the note outright
   function deleteNote(id) {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === id ? { ...note, trashed: true, archived: false } : note
+      )
+    );
+  }
+
+  function restoreNote(id) {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === id ? { ...note, trashed: false } : note
+      )
+    );
+  }
+
+  function permanentlyDeleteNote(id) {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
   }
 
@@ -54,9 +71,11 @@ function App() {
   }
 
   // Which notes belong on the currently selected sidebar page
-  const pageNotes = notes.filter((note) =>
-    currentPage === "archive" ? note.archived : !note.archived
-  );
+  const pageNotes = notes.filter((note) => {
+    if (currentPage === "trash") return note.trashed;
+    if (note.trashed) return false;
+    return currentPage === "archive" ? note.archived : !note.archived;
+  });
 
   const sortedNotes = [...pageNotes].sort(
     (a, b) => Number(b.pinned) - Number(a.pinned ?? false)
@@ -68,7 +87,10 @@ function App() {
       note.content.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const showNotesGrid = currentPage === "notes" || currentPage === "archive";
+  const showNotesGrid =
+    currentPage === "notes" ||
+    currentPage === "archive" ||
+    currentPage === "trash";
 
   return (
     <>
@@ -84,6 +106,8 @@ function App() {
             <p className="empty-state">
               {currentPage === "archive"
                 ? "No archived notes"
+                : currentPage === "trash"
+                ? "No notes in Bin"
                 : "Notes you add appear here"}
             </p>
           )}
@@ -92,6 +116,8 @@ function App() {
             <NotesGrid
               notes={filteredNotes}
               deleteNote={deleteNote}
+              restoreNote={restoreNote}
+              permanentlyDeleteNote={permanentlyDeleteNote}
               togglePin={togglePin}
               toggleArchive={toggleArchive}
               editNote={editNote}

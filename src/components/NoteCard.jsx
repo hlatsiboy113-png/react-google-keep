@@ -4,8 +4,11 @@ import {
   MdOutlinePushPin,
   MdEdit,
   MdDelete,
+  MdDeleteForever,
+  MdRestore,
   MdPalette,
   MdArchive,
+  MdUnarchive,
   MdPersonAdd,
   MdImage,
   MdNotificationsNone,
@@ -13,27 +16,37 @@ import {
   MdClose,
 } from "react-icons/md";
 
+const COLORS = [
+  "#ffffff",
+  "#f28b82",
+  "#fbbc04",
+  "#fff475",
+  "#ccff90",
+  "#a7ffeb",
+  "#cbf0f8",
+  "#aecbfa",
+  "#d7aefb",
+];
+
 function NoteCard({
   note,
   deleteNote,
+  restoreNote,
+  permanentlyDeleteNote,
   togglePin,
   editNote,
   toggleArchive,
-  changeColor,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [showColors, setShowColors] = useState(false);
 
-  const [editedNote, setEditedNote] = useState({
-    ...note,
-  });
+  const [editedNote, setEditedNote] = useState({ ...note });
 
   function startEditing() {
     setEditedNote({
       ...note,
       color: note.color || "#ffffff",
     });
-
     setIsEditing(true);
   }
 
@@ -50,10 +63,41 @@ function NoteCard({
   }
 
   function handleColor(color) {
-    setEditedNote((prev) => ({
-      ...prev,
-      color,
-    }));
+    setEditedNote((prev) => ({ ...prev, color }));
+  }
+
+  // Notes in the Bin get a simplified, non-editable toolbar
+  if (note.trashed) {
+    return (
+      <div
+        className="note-card"
+        style={{ backgroundColor: note.color || "#ffffff" }}
+      >
+        <div className="note-header">
+          <h3>{note.title}</h3>
+        </div>
+
+        <p>{note.content}</p>
+
+        <div className="note-actions">
+          <button
+            className="icon-btn"
+            onClick={() => restoreNote(note.id)}
+            title="Restore"
+          >
+            <MdRestore />
+          </button>
+
+          <button
+            className="icon-btn"
+            onClick={() => permanentlyDeleteNote(note.id)}
+            title="Delete forever"
+          >
+            <MdDeleteForever />
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -66,7 +110,6 @@ function NoteCard({
       }}
     >
       {/* Header */}
-
       <div className="note-header">
         {isEditing ? (
           <input
@@ -75,40 +118,26 @@ function NoteCard({
             placeholder="Title"
             value={editedNote.title}
             onChange={(e) =>
-              setEditedNote({
-                ...editedNote,
-                title: e.target.value,
-              })
+              setEditedNote({ ...editedNote, title: e.target.value })
             }
           />
         ) : (
           <h3>{note.title}</h3>
         )}
 
-        <button
-          className="icon-btn"
-          onClick={() => togglePin(note.id)}
-        >
-          {note.pinned ? (
-            <MdPushPin />
-          ) : (
-            <MdOutlinePushPin />
-          )}
+        <button className="icon-btn" onClick={() => togglePin(note.id)}>
+          {note.pinned ? <MdPushPin /> : <MdOutlinePushPin />}
         </button>
       </div>
 
       {/* Content */}
-
       {isEditing ? (
         <textarea
           className="edit-content"
           placeholder="Take a note..."
           value={editedNote.content}
           onChange={(e) =>
-            setEditedNote({
-              ...editedNote,
-              content: e.target.value,
-            })
+            setEditedNote({ ...editedNote, content: e.target.value })
           }
         />
       ) : (
@@ -116,16 +145,19 @@ function NoteCard({
       )}
 
       {/* Toolbar */}
-
       {isEditing ? (
         <div className="note-actions">
-
-          <button className="icon-btn">
-            <MdArchive />
+          <button
+            className="icon-btn"
+            onClick={() =>
+              setEditedNote((prev) => ({ ...prev, archived: !prev.archived }))
+            }
+            title={editedNote.archived ? "Unarchive" : "Archive"}
+          >
+            {editedNote.archived ? <MdUnarchive /> : <MdArchive />}
           </button>
 
           <div className="color-container">
-
             <button
               className="icon-btn"
               onClick={() => setShowColors(!showColors)}
@@ -135,40 +167,17 @@ function NoteCard({
 
             {showColors && (
               <div className="color-picker">
-
-                <button
-                  className="color-dot"
-                  style={{ background: "#ffffff" }}
-                  onClick={() => handleColor("#ffffff")}
-                />
-
-                <button
-                  className="color-dot"
-                  style={{ background: "#f28b82" }}
-                  onClick={() => handleColor("#f28b82")}
-                />
-
-                <button
-                  className="color-dot"
-                  style={{ background: "#fff475" }}
-                  onClick={() => handleColor("#fff475")}
-                />
-
-                <button
-                  className="color-dot"
-                  style={{ background: "#ccff90" }}
-                  onClick={() => handleColor("#ccff90")}
-                />
-
-                <button
-                  className="color-dot"
-                  style={{ background: "#aecbfa" }}
-                  onClick={() => handleColor("#aecbfa")}
-                />
-
+                {COLORS.map((color) => (
+                  <button
+                    key={color}
+                    type="button"
+                    className="color-dot"
+                    style={{ backgroundColor: color }}
+                    onClick={() => handleColor(color)}
+                  />
+                ))}
               </div>
             )}
-
           </div>
 
           <button className="icon-btn">
@@ -183,52 +192,35 @@ function NoteCard({
             <MdNotificationsNone />
           </button>
 
-          <button
-            className="icon-btn"
-            onClick={() => deleteNote(note.id)}
-          >
+          <button className="icon-btn" onClick={() => deleteNote(note.id)}>
             <MdDelete />
           </button>
 
-          <button
-            className="icon-btn"
-            onClick={saveChanges}
-          >
+          <button className="icon-btn" onClick={saveChanges}>
             <MdCheck />
           </button>
 
-          <button
-            className="icon-btn"
-            onClick={cancelEditing}
-          >
+          <button className="icon-btn" onClick={cancelEditing}>
             <MdClose />
           </button>
-
         </div>
       ) : (
         <div className="note-actions">
-
-          <button
-            className="icon-btn"
-            onClick={startEditing}
-          >
+          <button className="icon-btn" onClick={startEditing}>
             <MdEdit />
           </button>
 
-          <button
-            className="icon-btn"
-            onClick={() => deleteNote(note.id)}
-          >
+          <button className="icon-btn" onClick={() => deleteNote(note.id)}>
             <MdDelete />
           </button>
 
           <button
             className="icon-btn"
             onClick={() => toggleArchive(note.id)}
+            title={note.archived ? "Unarchive" : "Archive"}
           >
-            <MdArchive />
+            {note.archived ? <MdUnarchive /> : <MdArchive />}
           </button>
-
         </div>
       )}
     </div>
