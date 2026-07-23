@@ -1,21 +1,21 @@
-<<<<<<< HEAD
-# React + Vite
+# React Google Keep
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Google Keep clone built with React and Vite.
 
-Currently, two official plugins are available:
+Features: note creation and editing, pinning, colour-coding, archiving,
+a soft-delete Bin (restore or permanently delete), live search, and
+persistence via localStorage.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Getting started
 
-## React Compiler
+```bash
+npm install
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Available scripts
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# react-google-keep
-A feature-rich Google Keep clone built with React and Vite. Includes note creation, deletion, local storage persistence, responsive design, and Google Keep-inspired features such as pinning, color coding, archiving, search, and grid/list views.
->>>>>>> 31089826fb317703a1f41d8774fd56c540a82d81
+- `npm run dev` – start the local dev server
+- `npm run build` – build for production
+- `npm run lint` – run ESLint
+- `npm run preview` – preview the production build locally
