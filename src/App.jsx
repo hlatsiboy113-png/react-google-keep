@@ -4,109 +4,110 @@ import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import CreateNote from "./components/CreateNote";
 import NotesGrid from "./components/NotesGrid";
-import SearchBar from "./components/SearchBar";
 
 function App() {
   const [notes, setNotes] = useState(() => {
     const savedNotes = localStorage.getItem("notes");
     return savedNotes ? JSON.parse(savedNotes) : [];
-});
+  });
 
-const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState("notes");
 
-const sortedNotes = [...notes].sort(
-  (a, b) => Number(b.pinned) - Number(a.pinned ?? false)
-);
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
-const filteredNotes = sortedNotes.filter((note) =>
-  note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  note.content.toLowerCase().includes(searchTerm.toLowerCase())
-);
+  function addNote(newNote) {
+    setNotes((prevNotes) => [
+      ...prevNotes,
+      { ...newNote, archived: false },
+    ]);
+  }
 
+  function deleteNote(id) {
+    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+  }
 
+  function togglePin(id) {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === id ? { ...note, pinned: !note.pinned } : note
+      )
+    );
+  }
 
-function addNote(newNote) {
-  setNotes((prevNotes) => [...prevNotes, newNote]);
-}
+  function toggleArchive(id) {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === id ? { ...note, archived: !note.archived } : note
+      )
+    );
+  }
 
-useEffect(() => {
-  localStorage.setItem("notes", JSON.stringify(notes));
-}, [notes]);
+  function editNote(updatedNote) {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === updatedNote.id ? updatedNote : note
+      )
+    );
+  }
 
-
-function deleteNote(id) {
-  setNotes((prevNotes) =>
-      prevNotes.filter((note) => note.id !== id)
+  // Which notes belong on the currently selected sidebar page
+  const pageNotes = notes.filter((note) =>
+    currentPage === "archive" ? note.archived : !note.archived
   );
-}
 
-function togglePin(id) {
-  setNotes((prevNotes) =>
-    prevNotes.map((note) =>
-      note.id === id
-        ? { ...note, pinned: !note.pinned }
-        : note
-    )
+  const sortedNotes = [...pageNotes].sort(
+    (a, b) => Number(b.pinned) - Number(a.pinned ?? false)
   );
-}
 
-function toggleArchive(id) {
-  setNotes((prevNotes) =>
-    prevNotes.map((note) =>
-      note.id === id
-        ? { ...note, archived: !note.archived }
-        : note
-    )
+  const filteredNotes = sortedNotes.filter(
+    (note) =>
+      note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      note.content.toLowerCase().includes(searchTerm.toLowerCase())
   );
-}
 
-function editNote(updatedNote) {
-  setNotes((prevNotes) =>
-    prevNotes.map((note) =>
-      note.id === updatedNote.id
-        ? updatedNote
-        : note
-    )
-  );
-}
+  const showNotesGrid = currentPage === "notes" || currentPage === "archive";
 
-function changeColor(id, color) {
-  console.log("Changing:", id, color);
+  return (
+    <>
+      <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-  setNotes((prevNotes) =>
-    prevNotes.map((note) =>
-      note.id === id
-        ? { ...note, color }
-        : note
-    )
-  );
-}
+      <div className="container">
+        <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
 
-return (
-  <>
-  <Header 
-    searchTerm={searchTerm}
-    setSearchTerm={setSearchTerm}
-  />
-  
-  <div className="container">
-    <Sidebar />
-    
-    <main className="content">
-      
-      <CreateNote addNote={addNote}/>
-      
-      <NotesGrid
-        notes={filteredNotes}
-        deleteNote={deleteNote}
-        togglePin={togglePin}
-        toggleArchive={toggleArchive}
-        editNote={editNote}
-        changeColor={changeColor}
-      />
-    </main>
-  </div>
-  </>
+        <main className="content">
+          {currentPage === "notes" && <CreateNote addNote={addNote} />}
+
+          {showNotesGrid && filteredNotes.length === 0 && (
+            <p className="empty-state">
+              {currentPage === "archive"
+                ? "No archived notes"
+                : "Notes you add appear here"}
+            </p>
+          )}
+
+          {showNotesGrid && filteredNotes.length > 0 && (
+            <NotesGrid
+              notes={filteredNotes}
+              deleteNote={deleteNote}
+              togglePin={togglePin}
+              toggleArchive={toggleArchive}
+              editNote={editNote}
+            />
+          )}
+
+          {(currentPage === "reminders" || currentPage === "labels") && (
+            <p className="empty-state">
+              {currentPage === "reminders"
+                ? "Reminders aren't built yet — coming in a future update."
+                : "Labels aren't built yet — coming in a future update."}
+            </p>
+          )}
+        </main>
+      </div>
+    </>
   );
 }
 

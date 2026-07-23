@@ -168,6 +168,13 @@
   font-size: 1.5rem;
 }
 
+.empty-state {
+  color: #5f6368;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 60px;
+}
+
 /* Notes Grid */
 
 .notes-grid {

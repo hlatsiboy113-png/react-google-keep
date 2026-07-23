@@ -6,33 +6,28 @@ import {
   MdDeleteOutline,
 } from "react-icons/md";
 
-function Sidebar() {
+const PAGES = [
+  { id: "notes", label: "Notes", icon: MdLightbulbOutline },
+  { id: "reminders", label: "Reminders", icon: MdNotificationsNone },
+  { id: "labels", label: "Edit labels", icon: MdEdit },
+  { id: "archive", label: "Archive", icon: MdArchive },
+  { id: "trash", label: "Bin", icon: MdDeleteOutline },
+];
+
+function Sidebar({ currentPage, setCurrentPage }) {
   return (
     <aside className="sidebar">
-      <button className="sidebar-item active">
-        <MdLightbulbOutline />
-        <span>Notes</span>
-      </button>
-
-      <button className="sidebar-item">
-        <MdNotificationsNone />
-        <span>Reminders</span>
-      </button>
-
-      <button className="sidebar-item">
-        <MdEdit />
-        <span>Edit labels</span>
-      </button>
-
-      <button className="sidebar-item">
-        <MdArchive />
-        <span>Archive</span>
-      </button>
-
-      <button className="sidebar-item">
-        <MdDeleteOutline />
-        <span>Bin</span>
-      </button>
+      {PAGES.map(({ id, label, icon: Icon }) => (
+        <button
+          key={id}
+          className={`sidebar-item${currentPage === id ? " active" : ""}`}
+          onClick={() => setCurrentPage(id)}
+          type="button"
+        >
+          <Icon />
+          <span>{label}</span>
+        </button>
+      ))}
     </aside>
   );
 }
