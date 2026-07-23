@@ -4,6 +4,7 @@ function NotesGrid({
   notes,
   deleteNote,
   togglePin,
+  toggleArchive,
   editNote,
   changeColor
 }) {
@@ -15,6 +16,7 @@ function NotesGrid({
           note={note}
           deleteNote={deleteNote}
           togglePin={togglePin}
+          toggleArchive={toggleArchive}
           editNote={editNote}
           changeColor={changeColor}
         />
